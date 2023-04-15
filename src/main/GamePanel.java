@@ -160,17 +160,19 @@ public void setMoving(boolean moving){
         }
     }
 
-    public void paintComponent(Graphics g) {
-        //invocamos a la super class para evitar bugs y glitches visuales al actualizar el panel
-        super.paintComponent(g);
-
+    //actualizar panel
+    public void updateGame(){
         updateAnimationTick();
 
         //validar input y asignar animacion correspondiente
         setAnimation();
         //valida si hay cambios en el panel y actualiza la posicion de los elementos
         updatePosition();
+    }
 
+    public void paintComponent(Graphics g) {
+        //invocamos a la super class para evitar bugs y glitches visuales al actualizar el panel
+        super.paintComponent(g);
         //dibujamos la imagen que es traida mas arriba y almacenada en la variable img
         //usamos el metodo .getSubImage() para traer solo una sección de la imagen
 
