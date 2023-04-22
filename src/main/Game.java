@@ -1,5 +1,9 @@
 package main;
 
+import entities.Player;
+
+import java.awt.*;
+
 public class Game implements Runnable {
     //fps
     private final int FPS_SET = 120;
@@ -9,16 +13,28 @@ public class Game implements Runnable {
     //creamos el thread
     private Thread gameThread;
 
+    //crear el jugador
+    private Player player;
+
     public Game() {
-        gamePanel = new GamePanel();
+
+        initClasses();
+
+        gamePanel = new GamePanel(this);
         gameWindow = new GameWindow(gamePanel);
         //hacemos que gamePanel sea el focus de los
         // inputs que enviamos desde el teclado o el mouse
         //de lo contrario nuestros inputs no serán leidos correctamente
         gamePanel.requestFocus();
 
+
+
         startGameLoop();
 
+    }
+
+    private void initClasses() {
+        player = new Player(200,200);
     }
 
     //iniciar game loop (thread)
@@ -28,7 +44,11 @@ public class Game implements Runnable {
     }
 
     public void update(){
-        gamePanel.updateGame();
+        player.update();
+    }
+
+    public void render(Graphics g){
+        player.render(g);
     }
 
     // ** runnable del frame rate **
@@ -105,5 +125,13 @@ public class Game implements Runnable {
 
         }
 
+    }
+
+    public void windowFocusLost(){
+        player.resetDirBooleans();
+    }
+
+    public Player getPlayer(){
+        return player;
     }
 }
