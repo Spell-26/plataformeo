@@ -1,6 +1,7 @@
 package main;
 
 import entities.Player;
+import levels.LevelManager;
 
 import java.awt.*;
 
@@ -16,6 +17,19 @@ public class Game implements Runnable {
     //crear el jugador
     private Player player;
 
+    //crear nivel
+    private LevelManager levelManager;
+
+    //tamaño del tablero
+    public final static int TILES_DEFAULT_SIZE = 32;
+    public final static float SCALE = 1.5f;
+    public final static int TILES_IN_WIDTH = 26;
+    public final static int TILES_IN_HEIGHT = 14;
+    public final static int TILES_SIZE = (int)(TILES_DEFAULT_SIZE * SCALE);
+    //tamaño de la ventana del juego
+    public final static int GAME_WIDTH = TILES_SIZE * TILES_IN_WIDTH;
+    public final static int GAME_HEIGHT = TILES_SIZE * TILES_IN_HEIGHT;
+
     public Game() {
 
         initClasses();
@@ -27,14 +41,12 @@ public class Game implements Runnable {
         //de lo contrario nuestros inputs no serán leidos correctamente
         gamePanel.requestFocus();
 
-
-
         startGameLoop();
-
     }
 
     private void initClasses() {
         player = new Player(200,200);
+        levelManager = new LevelManager(this);
     }
 
     //iniciar game loop (thread)
@@ -45,9 +57,11 @@ public class Game implements Runnable {
 
     public void update(){
         player.update();
+        levelManager.update();
     }
 
     public void render(Graphics g){
+        levelManager.draw(g);
         player.render(g);
     }
 

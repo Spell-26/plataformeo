@@ -21,9 +21,10 @@ public class Constants {
         public static final int HIT = 8;
         public static final int GROUND = 9;
         public static final int DIE = 10;
+        public static final int RUNNING_BACKWARDS = 11;
 
-        public static final int ATTACK_JUMP_1 = 11;
-        public static final int ATTACK_JUMP_2 = 12;
+        public static final int ATTACK_JUMP_1 = 12;
+        public static final int ATTACK_JUMP_2 = 13;
 
 
         public static int GetSpriteAmount(int player_action){
@@ -32,6 +33,7 @@ public class Constants {
                 case RUNNING:
                 case ATTACK_2:
                 case ATTACK_3:
+                case RUNNING_BACKWARDS:
                     return 6;
                 case IDLE_1:
                 case IDLE_2:

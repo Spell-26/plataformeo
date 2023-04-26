@@ -1,13 +1,12 @@
 package entities;
 
+import utils.LoadSave;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-
-import static utils.Constants.Directions.*;
-import static utils.Constants.Directions.DOWN;
 import static utils.Constants.PlayerConstants.*;
 
 public class Player extends Entity {
@@ -45,7 +44,7 @@ public class Player extends Entity {
     }
 
     public void render(Graphics g){
-        g.drawImage(animations[playerAction][animationIndex], (int)x, (int)y, 200, 148, null);
+        g.drawImage(animations[playerAction][animationIndex], (int)x, (int)y, 100, 74, null);
     }
 
     //manejar el tiempo entre cada imagen para generar la animacion
@@ -115,31 +114,16 @@ public class Player extends Entity {
     }
 
     private void loadAnimations() {
-
-        InputStream is = getClass().getResourceAsStream("/heroe/heroe_sprites.png");
-
-        try {
-            BufferedImage img = ImageIO.read(is);
+            BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.PLAYER_ATLAS);
 
             //asignamos un espacio en el array dependiendo de las imagenes que compongan nuestra animacion
-            animations = new BufferedImage[11][10];
+            animations = new BufferedImage[12][10];
 
             for(int j = 0; j < animations.length; j++){
                 for(int i = 0; i < animations[j].length; i++){
                     animations[j][i] = img.getSubimage(i*50,j*37,50,37);
                 }
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally{
-            try {
-                is.close();
-            }catch (IOException e){
-                e.printStackTrace();
-            }
-        }
-
-
     }
 
     public void resetDirBooleans(){
