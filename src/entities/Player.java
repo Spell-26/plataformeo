@@ -1,12 +1,10 @@
 package entities;
 
+import main.Game;
+import utils.HelpMethods;
 import utils.LoadSave;
-
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
 import static utils.Constants.PlayerConstants.*;
 
 public class Player extends Entity {
@@ -25,9 +23,17 @@ public class Player extends Entity {
 
     private float playerSpeed = 2.0f;
 
-    public Player(float x, float y){
-        super(x, y);
+    // LVL DATA
+    private int[][] lvlData;
+
+    // HITBOX
+    private float xDrawOffset = 17 * Game.SCALE;
+    private float yDrawOffset = 9 * Game.SCALE;
+
+    public Player(float x, float y, int width, int height){
+        super(x, y, width, height);
         loadAnimations();
+        initHitbox(x, y, 15 * Game.SCALE, 27 * Game.SCALE);
     }
 
     public void update(){
@@ -44,7 +50,8 @@ public class Player extends Entity {
     }
 
     public void render(Graphics g){
-        g.drawImage(animations[playerAction][animationIndex], (int)x, (int)y, 100, 74, null);
+        g.drawImage(animations[playerAction][animationIndex], (int) (hitbox.x - xDrawOffset), (int) (hitbox.y - yDrawOffset), width, height, null);
+        drawHitbox(g);
     }
 
     //manejar el tiempo entre cada imagen para generar la animacion
@@ -94,22 +101,42 @@ public class Player extends Entity {
 
         moving = false;
 
+        if(!left && !right && !up && !down){
+            return;
+        }
+
+        float xSpeed = 0, ySpeed = 0;
+
         if(left && !right){
-            x -= playerSpeed;
-            moving = true;
+            xSpeed = -playerSpeed;
+
         }
         else if(!left && right){
-            x += playerSpeed;
-            moving = true;
+            xSpeed = playerSpeed;
+
         }
 
         if(up && !down){
-            y -= playerSpeed;
-            moving = true;
+            ySpeed = -playerSpeed;
+
         }
         else if(!up && down){
-            y += playerSpeed;
+            ySpeed = playerSpeed;
+
+        }
+
+        /*
+        if(HelpMethods.CanMoveHere(x+xSpeed, y+ySpeed, width, height, lvlData)){
             moving = true;
+            this.x += xSpeed;
+            this.y += ySpeed;
+        }
+
+         */
+        if(HelpMethods.CanMoveHere(hitbox.x + xSpeed, hitbox.y + ySpeed, hitbox.width, hitbox.height, lvlData)){
+            moving = true;
+            hitbox.x += xSpeed;
+            hitbox.y += ySpeed;
         }
     }
 
@@ -124,6 +151,10 @@ public class Player extends Entity {
                     animations[j][i] = img.getSubimage(i*50,j*37,50,37);
                 }
             }
+    }
+
+    public void loadLvlData(int[][] lvlData){
+        this.lvlData = lvlData;
     }
 
     public void resetDirBooleans(){
